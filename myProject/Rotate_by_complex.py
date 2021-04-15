@@ -821,7 +821,7 @@ class Part_4_2(SpecialThreeDScene):
             "number_scale_val": 0.5,
             'decimal_number_config': {'color': BLACK},
         }
-
+        MYORIGIN=ORIGIN+2*RIGHT+UP
         axes_origin = ORIGIN
         axes_scale = 1.2
         # axes_scale = 1.2
@@ -834,8 +834,8 @@ class Part_4_2(SpecialThreeDScene):
         #加了个复杂平面
         cp = ComplexPlane(axis_config=axis_config).scale(cp_scale*axes_scale, about_point=ORIGIN).shift(axes_origin)
         #添加坐标
-        cp.add_coordinates(0, 1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6)
-        cp.add_coordinates(1j, 2j, 3j, 4j, -1j, -2j, -3j, -4j)
+        # cp.add_coordinates(0, 1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6)
+        # cp.add_coordinates(1j, 2j, 3j, 4j, -1j, -2j, -3j, -4j)
 
         ##
         l = axes_scale
@@ -853,11 +853,11 @@ class Part_4_2(SpecialThreeDScene):
 
         w = TAU/2
         curve_3d = ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t), r * np.sin(w * t)]), t_min=0, t_max=8,
-                                      color=ORANGE, stroke_width=4).shift(cp.n2p(2))
+                                      color=ORANGE, stroke_width=4).shift(cp.n2p(-2)+5*LEFT)
         self.cos_t = ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t), 0]), t_min=0, t_max=8,
-                                      color=GREEN, stroke_width=44).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+1.45))
+                                      color=GREEN, stroke_width=44).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+3.45))
         self.sin_t = ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t)]), t_min=0, t_max=8,
-                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+2))
+                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+5))
 
         cube_g = VGroup()
         A = axes.c2p(-2, -0.5, 0.5)
@@ -932,22 +932,24 @@ class Part_4_2(SpecialThreeDScene):
         self.varphi = 0
         def rotate_all(r, dt):
             r.rotate(2.5*DEGREES, RIGHT, about_point=ORIGIN)
+            # r.rotate(2.5*DEGREES, RIGHT, about_point=r.get_center())
             self.varphi += 2.5*DEGREES
             # self.cos_t.become(ParametricFunction(lambda t: np.array([t * r, r * np.cos(w * t + self.varphi), 0]), t_min=0, t_max=8,
             #                            color=GREEN, stroke_width=4)).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+1.45))
             # self.sin_t.become(ParametricFunction(lambda t: np.array([t * r, 0, r * np.sin(w * t + self.varphi)]), t_min=0, t_max=8,
             #                            color=PINK, stroke_width=4)).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+2))
         self.cos_t.add_updater(lambda c: c.become(ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t + self.varphi), 0]), t_min=-0.0001, t_max=8,
-                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((OUT+IN+RIGHT)*r*(1+1.45))))
+                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((5*IN)*r*(1+1.45))))
         self.sin_t.add_updater(lambda s: s.become(ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t + self.varphi)]), t_min=-0.0001, t_max=8,
-                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((DOWN+0.5*UP+RIGHT)*r*(1+2))))
+                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((DOWN+LEFT)*r*(1+2))))
 
         ## animation ##
+        axes.shift(curve_3d.get_center()+IN+5*RIGHT)
 
         self.add(cp, axes)
         circle.shift(axes.c2p(4, 0, 0))
         #self.add(curve_3d, cube_g, circle, line_r, dot, navi_group, yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
-        self.add(circle, line_r, dot, navi_group, yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
+        self.add(circle, line_r, dot,  yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
         yt.shift(DOWN*r*2)
         xt.shift(OUT*r*1.45)
         self.add(my_axes)
