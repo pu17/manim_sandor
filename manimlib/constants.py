@@ -127,17 +127,27 @@ HIGH_QUALITY_CAMERA_CONFIG = {
     "frame_rate": 60,
 }
 
+# MEDIUM_QUALITY_CAMERA_CONFIG = {
+#     "pixel_height": 720,
+#     "pixel_width": 1280,
+#     "frame_rate": 30,
+# }
 MEDIUM_QUALITY_CAMERA_CONFIG = {
-    "pixel_height": 720,
-    "pixel_width": 1280,
+    "pixel_height": 1280,
+    "pixel_width": 720,
     "frame_rate": 30,
 }
 
 LOW_QUALITY_CAMERA_CONFIG = {
-    "pixel_height": 480,
-    "pixel_width": 854,
+    "pixel_height": 854,
+    "pixel_width": 480,
     "frame_rate": 15,
 }
+# LOW_QUALITY_CAMERA_CONFIG = {
+#     "pixel_height": 480,
+#     "pixel_width": 854,
+#     "frame_rate": 15,
+# }
 
 DEFAULT_PIXEL_HEIGHT = PRODUCTION_QUALITY_CAMERA_CONFIG["pixel_height"]
 DEFAULT_PIXEL_WIDTH = PRODUCTION_QUALITY_CAMERA_CONFIG["pixel_width"]
@@ -148,8 +158,10 @@ DEFAULT_POINT_DENSITY_1D = 250
 
 DEFAULT_STROKE_WIDTH = 4
 
-FRAME_HEIGHT = 8.0
-FRAME_WIDTH = FRAME_HEIGHT * DEFAULT_PIXEL_WIDTH / DEFAULT_PIXEL_HEIGHT
+# FRAME_HEIGHT = 8.0
+FRAME_WIDTH = 8.0
+
+FRAME_HEIGHT = FRAME_WIDTH * DEFAULT_PIXEL_HEIGHT / DEFAULT_PIXEL_WIDTH
 FRAME_Y_RADIUS = FRAME_HEIGHT / 2
 FRAME_X_RADIUS = FRAME_WIDTH / 2
 
