@@ -831,11 +831,11 @@ class Part_4_2(SpecialThreeDScene):
 
         cp_scale = 1.5
         # cp_scale = 2
-        #加了个复杂平面
+        #加了个复杂平面B
         cp = ComplexPlane(axis_config=axis_config).scale(cp_scale*axes_scale, about_point=ORIGIN).shift(axes_origin)
         #添加坐标
-        # cp.add_coordinates(0, 1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6)
-        # cp.add_coordinates(1j, 2j, 3j, 4j, -1j, -2j, -3j, -4j)
+        cp.add_coordinates(0, 1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6)
+        cp.add_coordinates(1j, 2j, 3j, 4j, -1j, -2j, -3j, -4j)
 
         ##
         l = axes_scale
@@ -844,21 +844,24 @@ class Part_4_2(SpecialThreeDScene):
         r = cp.n2p(1)[0]/2
         print("r:",r,"n2p(1):",cp.n2p(-2))
 
-        circle = Circle(radius=r).rotate(PI/2, UP).shift(axes.c2p(-2, 0, 0))
+        circle = Circle(radius=r).rotate(PI/2, UP).shift(axes.c2p(-1.5, 0, 0)+3*RIGHT)
         line_r = Line(circle.get_center(), circle.get_center() + UP * r, color=ORANGE, stroke_width=6)
         # line_r = Line(circle.get_center(), circle.get_center() + UP * r, color=ORANGE, stroke_width=6)
         dot = Dot3d(color=RED, size=0.18).add_updater(lambda d: d.move_to(line_r.get_end()))
+        
 
         cube = Cube(color=BLUE, fill_opacity=0.0, stroke_width=4, stroke_color=BLUE_D).scale(np.array([l * 4, l, l]))
 
         w = TAU/2
+        #这里的shift 是到开始的地方
         curve_3d = ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t), r * np.sin(w * t)]), t_min=0, t_max=8,
-                                      color=ORANGE, stroke_width=4).shift(cp.n2p(-2)+5*LEFT)
+                                      color=BLACK, stroke_width=4).shift(cp.n2p(-1.5)+5*LEFT)
         self.cos_t = ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t), 0]), t_min=0, t_max=8,
                                       color=GREEN, stroke_width=44).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+3.45))
         self.sin_t = ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t)]), t_min=0, t_max=8,
                                       color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+5))
-
+        
+        
         cube_g = VGroup()
         A = axes.c2p(-2, -0.5, 0.5)
         B = axes.c2p(-2, 0.5, 0.5)
@@ -870,12 +873,13 @@ class Part_4_2(SpecialThreeDScene):
         H = axes.c2p(2, -0.5, -0.5)
         line_color = BLUE
         s_width = 2
-        up_line=Line(ORIGIN,UP,color=RED)
-        down_line=Line(ORIGIN,DOWN,color=PINK)
-        in_line=Line(ORIGIN,IN,color=YELLOW)
-        out_line=Line(ORIGIN,OUT,color=BLUE)
-        right_line=Line(ORIGIN,RIGHT,color=BLACK)
-        left_line=Line(ORIGIN,LEFT,color=GREEN)
+        line_sc=4.5
+        up_line=Line(ORIGIN,UP*line_sc,color=RED)
+        down_line=Line(ORIGIN,DOWN*line_sc,color=PINK)
+        in_line=Line(ORIGIN,IN*line_sc,color=YELLOW)
+        out_line=Line(ORIGIN,OUT*line_sc,color=BLUE)
+        right_line=Line(ORIGIN,RIGHT*line_sc,color=BLACK)
+        left_line=Line(ORIGIN,LEFT*line_sc*5,color=GREEN)
 
         my_axes=VGroup(up_line,down_line,in_line,out_line,right_line,left_line)
         
@@ -939,19 +943,30 @@ class Part_4_2(SpecialThreeDScene):
             # self.sin_t.become(ParametricFunction(lambda t: np.array([t * r, 0, r * np.sin(w * t + self.varphi)]), t_min=0, t_max=8,
             #                            color=PINK, stroke_width=4)).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+2))
         self.cos_t.add_updater(lambda c: c.become(ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t + self.varphi), 0]), t_min=-0.0001, t_max=8,
-                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((5*IN)*r*(1+1.45))))
+                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((IN+1.6*LEFT+0.1*DOWN)*r*(1+1.45))))
         self.sin_t.add_updater(lambda s: s.become(ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t + self.varphi)]), t_min=-0.0001, t_max=8,
-                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((DOWN+LEFT)*r*(1+2))))
+                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((0.95*DOWN+LEFT+0.5*OUT)*r*(1+2))))
 
+
+        dot2 = Dot3d(color=PINK, size=0.18).add_updater(lambda d: d.move_to(self.cos_t.get_end()))
+        dot3 = Dot3d(color=GREEN, size=0.18).add_updater(lambda d: d.move_to(self.sin_t.get_end()))
+        # cos_line=Line(self.cos_t.get_end(),dot.get_center(),color=ORANGE).add_updater(lambda c:c.become(Line(self.cos_t.get_end(),dot.get_center(),color=ORANGE)))
+        cos_line=Line(self.cos_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width).add_updater(lambda c:c.become(Line(self.cos_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width)))
+        # sin_line=Line(self.sin_t.get_end(),dot.get_center(),color=ORANGE).add_updater(lambda c:c.become(Line(self.cos_t.get_end(),dot.get_center(),color=ORANGE)))
+        sin_line=Line(self.sin_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width).add_updater(lambda c:c.become(Line(self.sin_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width)))
+        self.add(dot2,dot3)
+        self.add(cos_line,sin_line)
         ## animation ##
         axes.shift(curve_3d.get_center()+IN+5*RIGHT)
 
         self.add(cp, axes)
-        circle.shift(axes.c2p(4, 0, 0))
+        # circle.shift(axes.c2p(4, 0, 0))
         #self.add(curve_3d, cube_g, circle, line_r, dot, navi_group, yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
-        self.add(circle, line_r, dot,  yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
+        self.add(line_r, dot,  yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
         yt.shift(DOWN*r*2)
+
         xt.shift(OUT*r*1.45)
+        my_axes.shift(2*RIGHT+2*DOWN+2*IN)
         self.add(my_axes)
         self.wait()
         self.add(rotate_group)
