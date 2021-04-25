@@ -217,6 +217,7 @@ COLOR_MAP = {
     "BLUE_C": "#58C4DD",
     "BLUE_B": "#9CDCEB",
     "BLUE_A": "#C7E9F1",
+    "BLUE_PA":"#4c889d",
     "TEAL_E": "#49A88F",
     "TEAL_D": "#55C1A7",
     "TEAL_C": "#5CD0B3",
