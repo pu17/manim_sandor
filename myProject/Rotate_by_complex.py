@@ -866,7 +866,7 @@ class Part_4_2(SpecialThreeDScene):
                                       color=color_sin, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+5))
         dot2 = Dot3d(color=color_cos, size=0.18,plot_depth=1).add_updater(lambda d: d.move_to(self.cos_t.get_end()))
         dot3 = Dot3d(color=color_sin, size=0.18,plot_depth=1).add_updater(lambda d: d.move_to(self.sin_t.get_end()))
-
+        self.add(dot2,dot3)
         
         cube_g = VGroup()
         A = axes.c2p(-2, -0.5, 0.5)
@@ -981,7 +981,7 @@ class Part_4_2(SpecialThreeDScene):
         cos_line=DashedLine(self.cos_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width).add_updater(lambda c:c.become(DashedLine(self.cos_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width)))
         # sin_line=Line(self.sin_t.get_end(),dot.get_center(),color=ORANGE).add_updater(lambda c:c.become(Line(self.cos_t.get_end(),dot.get_center(),color=ORANGE)))
         sin_line=DashedLine(self.sin_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width).add_updater(lambda c:c.become(DashedLine(self.sin_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width)))
-        self.add(dot2,dot3)
+        
         
         ## animation ##
         axes.shift(curve_3d.get_center()+IN+5*RIGHT)
@@ -990,17 +990,28 @@ class Part_4_2(SpecialThreeDScene):
         # self.add(axes)
         # circle.shift(axes.c2p(4, 0, 0))
         #self.add(curve_3d, cube_g, circle, line_r, dot, navi_group, yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
-        self.add(line_r2, dot, self.sin_t, self.cos_t)
+        self.add(self.sin_t, self.cos_t)
         # self.add(text_sint, text_cost, text_eiwt)
-        yt.shift(DOWN*r*2)
+        # yt.shift(DOWN*r*2)
 
-        xt.shift(OUT*r*1.45)
+        # xt.shift(OUT*r*1.45)
+
+        cos_sin_lines=VGroup(cos_line,sin_line)
         my_axes.shift(2*RIGHT+2*DOWN+2*IN)
         self.add(my_axes)
+        self.play(
+            ShowCreation(cos_sin_lines)
+        )
+        self.play(
+            FocusOn(dot), 
+            FadeIn(line_r2),
+            FadeIn(dot)
+            
+        )
         self.wait()
         self.add(rotate_group)
         rotate_group.add_updater(rotate_all)
-        self.add(cos_line,sin_line)
+        # self.add(cos_line,sin_line)
         self.wait(15)
 
 class Part_5(SpecialThreeDScene):
