@@ -796,7 +796,7 @@ class Part_4_2(SpecialThreeDScene):
         'gamma': 0.0 * DEGREES,
         "distance": 50,
         },
-    'camera_config': {'background_color': WHITE},
+    'camera_config': {'background_color': BLACK},
     "three_d_axes_config": {
         "num_axis_pieces": 1,
         "number_line_config": {
@@ -855,7 +855,7 @@ class Part_4_2(SpecialThreeDScene):
         w = TAU/2
         #这里的shift 是到开始的地方
         curve_3d = ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t), r * np.sin(w * t)]), t_min=0, t_max=8,
-                                      color=BLACK, stroke_width=4).shift(cp.n2p(-1.5)+5*LEFT)
+                                      color=WHITE, stroke_width=4).shift(cp.n2p(-1.5)+5*LEFT)
         self.cos_t = ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t), 0]), t_min=0, t_max=8,
                                       color=GREEN, stroke_width=44).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+3.45))
         self.sin_t = ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t)]), t_min=0, t_max=8,
@@ -874,15 +874,35 @@ class Part_4_2(SpecialThreeDScene):
         line_color = BLUE
         s_width = 2
         line_sc=4.5
-        up_line=Line(ORIGIN,UP*line_sc,color=RED)
-        down_line=Line(ORIGIN,DOWN*line_sc,color=PINK)
-        in_line=Line(ORIGIN,IN*line_sc,color=YELLOW)
-        out_line=Line(ORIGIN,OUT*line_sc,color=BLUE)
-        right_line=Line(ORIGIN,RIGHT*line_sc,color=BLACK)
-        left_line=Line(ORIGIN,LEFT*line_sc*5,color=GREEN)
+        axes_color=LIGHT_GREY
+        up_line=Line(ORIGIN,UP*line_sc,color=axes_color)
+        down_line=Line(ORIGIN,DOWN*line_sc,color=axes_color).add_tip()
+        in_line=Line(ORIGIN,IN*line_sc,color=axes_color)
+        out_line=Line(ORIGIN,OUT*line_sc,color=axes_color).add_tip()
+        tip=out_line.get_tip().rotate(-180*DEGREES)
+        right_line=Line(ORIGIN,RIGHT*line_sc*0.5,color=axes_color).add_tip()
+        right_tip=right_line.get_tip().rotate(-90*DEGREES)
+        left_line=Line(ORIGIN,LEFT*line_sc*0.5,color=axes_color)
+        left_line_dash=DashedLine(LEFT*line_sc*0.5,LEFT*line_sc*3,color=axes_color,positive_space_ratio=0.3,dash_length=0.2)
 
-        my_axes=VGroup(up_line,down_line,in_line,out_line,right_line,left_line)
-        
+
+        my_axes=VGroup(up_line,down_line,in_line,out_line,right_line,left_line,left_line_dash)
+        # threedconfig = {
+        # "dimension": 3,
+        # "x_min": -1.5,
+        # "x_max": 3.5,
+        # "y_min": -5.5,
+        # "y_max": 5.5,
+        # "z_axis_config": {},
+        # "z_min": -3.5,
+        # "z_max": 3.5,
+        # "z_normal": DOWN,
+        # "num_axis_pieces": 20,
+        # "light_source": 9 * DOWN + 7 * LEFT + 10 * OUT,
+        # "include_tip": False,
+        # "center_point": ORIGIN,
+        # }
+        # my_axes=ThreeDAxes(**threedconfig)
         AB = Line(A, B, color=line_color, stroke_width=s_width)
         BC = DashedLine(C, B, color=line_color, stroke_width=s_width)
         CD = DashedLine(C, D, color=line_color, stroke_width=s_width)
@@ -943,9 +963,9 @@ class Part_4_2(SpecialThreeDScene):
             # self.sin_t.become(ParametricFunction(lambda t: np.array([t * r, 0, r * np.sin(w * t + self.varphi)]), t_min=0, t_max=8,
             #                            color=PINK, stroke_width=4)).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+2))
         self.cos_t.add_updater(lambda c: c.become(ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t + self.varphi), 0]), t_min=-0.0001, t_max=8,
-                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((IN+1.6*LEFT+0.1*DOWN)*r*(1+1.45))))
+                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((IN+1.6*LEFT+0.1*DOWN+0.18*UP)*r*(1+1.45))))
         self.sin_t.add_updater(lambda s: s.become(ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t + self.varphi)]), t_min=-0.0001, t_max=8,
-                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((0.95*DOWN+LEFT+0.5*OUT)*r*(1+2))))
+                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((0.95*DOWN+LEFT+0.6*OUT)*r*(1+2))))
 
 
         dot2 = Dot3d(color=PINK, size=0.18).add_updater(lambda d: d.move_to(self.cos_t.get_end()))
@@ -955,14 +975,15 @@ class Part_4_2(SpecialThreeDScene):
         # sin_line=Line(self.sin_t.get_end(),dot.get_center(),color=ORANGE).add_updater(lambda c:c.become(Line(self.cos_t.get_end(),dot.get_center(),color=ORANGE)))
         sin_line=Line(self.sin_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width).add_updater(lambda c:c.become(Line(self.sin_t.get_end(),dot.get_center(),color=line_color, stroke_width=s_width)))
         self.add(dot2,dot3)
-        self.add(cos_line,sin_line)
+        
         ## animation ##
         axes.shift(curve_3d.get_center()+IN+5*RIGHT)
 
-        self.add(cp, axes)
+        # self.add(cp, axes)
+        # self.add(axes)
         # circle.shift(axes.c2p(4, 0, 0))
         #self.add(curve_3d, cube_g, circle, line_r, dot, navi_group, yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
-        self.add(line_r, dot,  yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
+        self.add(line_r, dot, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
         yt.shift(DOWN*r*2)
 
         xt.shift(OUT*r*1.45)
@@ -971,6 +992,7 @@ class Part_4_2(SpecialThreeDScene):
         self.wait()
         self.add(rotate_group)
         rotate_group.add_updater(rotate_all)
+        self.add(cos_line,sin_line)
         self.wait(15)
 
 class Part_5(SpecialThreeDScene):
