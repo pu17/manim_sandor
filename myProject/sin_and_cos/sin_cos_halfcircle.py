@@ -27,13 +27,13 @@ class TrigRepresentationsScene(GraphScene):
         "x_min": -1,
         "x_max": 1,
         "y_axis_height": 4,
-        "label_stroke_color": GREY,
+        "label_stroke_color": "#3c3d5d",
         "y_tick_frequency": 1,
         "x_tick_frequency": 1,
         "x_labeled_nums": [],
         "y_labeled_nums": [],
         # "circle_color": "#f1a608",
-        "circle_color": GREY,
+        "circle_color": "#3c3d5d",
         "theta": 0,
         "increment_value": TAU,
         "final_theta": 0 * DEGREES,
@@ -41,11 +41,11 @@ class TrigRepresentationsScene(GraphScene):
         "arc_radius": 0.8,
         "radius_color": RED,
         "inner_sector_scale": 4.5,
-        "sector_color": TEAL,
+        "sector_color": "#d2de52",
         "close_new_points": True,
         "anchors_span_full_range": False,
         # points
-        'point_color': TEAL,
+        'point_color': "#d2de52",
         'point_size': 0.2,
 
         'num_decimal_places': 2,
@@ -54,17 +54,17 @@ class TrigRepresentationsScene(GraphScene):
         'y_coordinates_color': LIGHT_GREY,
 
         # "theta_color": "#f1a608",
-        "theta_color": TEAL,
+        "theta_color": "#d2de52",
         "theta_height": 0.3,
 
         "theta_value": 30*DEGREES,
 
-        "x_line_colors":TEAL,
+        "x_line_colors":"#d2de52",
         # "x_line_colors":"#d56d60",
         # "y_line_colors":"#6e8cb6",
-        "y_line_colors":TEAL,
-        "axis_color": GREY,
-        "axis_width":2
+        "y_line_colors":"#d2de52",
+        "axis_color": "#3c3d5d",
+        "axis_width":2,
 
     }
 
@@ -196,7 +196,8 @@ class TrigRepresentationsScene(GraphScene):
 
 class ShowSinCos(TrigRepresentationsScene):
     CONFIG = {
-        "alt_theta_val": 150*DEGREES,
+        "alt_theta_val": 154*DEGREES,
+        "fade_color": "#3c3d5d",
         'camera_config': {'background_color': WHITE}
     }
     def setup(self):
@@ -218,7 +219,7 @@ class ShowSinCos(TrigRepresentationsScene):
         # self.theta_group = line, Barc,self.theta,dot
         #
         # line.rotate(-self.theta_value)
-        brace = Brace(line, UP+0.6*LEFT, buff = SMALL_BUFF)
+        brace = Brace(line, UP+0.3*LEFT, buff = SMALL_BUFF)
         one = brace.get_text("1", buff = SMALL_BUFF)
         # VGroup(line, brace, one).rotate(self.theta_value)
 
@@ -251,18 +252,18 @@ class ShowSinCos(TrigRepresentationsScene):
             ShowCreation(arrow),
             ShowCreation(dot)
         )
-        self.wait()
-        self.play(
-            GrowFromCenter(brace),
-            Write(one)
-        )
-        self.wait(2)
-        self.play(*list(map(FadeOut, [
-            words, arrow, brace, one
-        ])))
-        self.play(
+        # self.wait()
+        # self.play(
+        #     GrowFromCenter(brace),
+        #     Write(one)
+        # )
+        # self.wait(2)
+        # self.play(*list(map(FadeOut, [
+        #     words, arrow, brace, one
+        # ])))
+        # self.play(
 
-        )
+        # )
         self.radial_line_label = VGroup(brace, one)
         self.intro_line =line
         # sc=0.7
@@ -272,8 +273,24 @@ class ShowSinCos(TrigRepresentationsScene):
         # self.my_axes.scale_about_point(0.7,ORIGIN)
         sin_line, sin_brace, sin_text = sin_group = self.get_line_brace_text("sin")
         cos_line, cos_brace, cos_text = cos_group = self.get_line_brace_text("cos")
+        negcos = TexMobject("-\\%s\\theta" % "cos",color=self.theta_color)
+        equation= TexMobject("\\cos","(\\pi-\\theta)","=","\\cos\\theta",color=self.circle_color,background_stroke_color=self.circle_color)
+        equation2= TexMobject("\\sin","(\\pi-\\theta)","=","\\sin\\theta",color=self.circle_color,background_stroke_color=self.circle_color)
+        equation.set_color_by_tex_to_color_map({
+            "(\\pi-\\theta)": self.theta_color
+        })
+        equation2.set_color_by_tex_to_color_map({
+            "(\\pi-\\theta)": self.theta_color
+        })
 
-        sin_text.next_to(cos_line,LEFT+UP)
+
+        negcos.scale(0.75)
+        equation.scale(0.45)
+        equation2.scale(0.45)
+        
+        
+
+        sin_text.next_to(cos_line,-0.01*LEFT+UP)
         cos_text.next_to(sin_line,DOWN)
 
         self.play(ShowCreation(sin_line))
@@ -286,7 +303,7 @@ class ShowSinCos(TrigRepresentationsScene):
         self.play(
             # GrowFromCenter(cos_brace),
             Write(sin_text),
-        )
+        ) 
         self.wait()
         # self.change_mode("well")
         # self.play(Write(self.point1))
@@ -318,7 +335,7 @@ class ShowSinCos(TrigRepresentationsScene):
                 self.get_line_brace_text("cos")[0],
                 self.get_theta_group()
             ))
-        fate_color=BLACK
+        fate_color=self.fade_color
         fate_ratio=0.1
         self.play(
             *list(map(FadeIn, [
@@ -341,10 +358,11 @@ class ShowSinCos(TrigRepresentationsScene):
             run_time = 2,
             # rate_func = there_and_back
         ))
-
+        negcos.next_to(sin_line,DOWN)
         # self.play(*list(map(FadeOut,[sin_brace, sin_text,cos_brace, cos_text])))
         self.play(
-            Transform(self.theta, self.theta2)
+            Transform(self.theta, self.theta2),
+            Write(negcos),
 
         )
         dot = self.theta_group[-1]
@@ -364,6 +382,16 @@ class ShowSinCos(TrigRepresentationsScene):
             Transform(sin_line_before,cos_line.copy()),
             Transform(cos_line_before,sin_line.copy()),
         )
+
+        # equations=VGroup(equation,equation2).arrange_submobjects(RIGHT).next_to(self.halfcircle,DOWN,buff=DEFAULT_MOBJECT_TO_MOBJECT_BUFFER/2)
+        equations=VGroup(equation,equation2).arrange_submobjects(RIGHT).next_to(self.halfcircle,DOWN,buff=DEFAULT_MOBJECT_TO_MOBJECT_BUFFER).shift(DOWN)
+        self.play(
+            Write(equation),
+        )
+        self.play(
+            Write(equation2),
+        )
+
 
         # self.play(Succession(
         #     *[
@@ -522,7 +550,7 @@ class ShowSinCos(TrigRepresentationsScene):
         brace.rotate(angle)
 
         brace.set_color(line.get_color())
-        text = TexMobject("\\%s\\theta" % func_name,)
+        text = TexMobject("\\%s\\theta" % func_name,color=self.circle_color)
         text.scale(0.75)
         # text[-2].set_color(self.theta_color)
         # text.add_background_rectangle()
@@ -533,8 +561,9 @@ class ShowSinCos(TrigRepresentationsScene):
         return Line(
             self.radius * (1. / np.sin(self.theta_value)) * UP,
             self.radius * (1. / np.cos(self.theta_value)) * RIGHT,
-            color=GREY
+            color="#3c3d5d"
         )
 
 
+        # TrigRepresentationsScene.setup(self)
 
