@@ -1,5 +1,5 @@
 from manimlib.imports import *
-from active_projects.diffyq.part2.shared_constructs import *
+from from_3b1b.active.diffyq.part2.shared_constructs import *
 
 
 class TwoDBodyWithManyTemperatures(ThreeDScene):
@@ -609,14 +609,14 @@ class TalkThrough1DHeatGraph(ShowEvolvingTempGraphWithArrows, SpecialThreeDScene
             for a in np.linspace(0, 1, 20)
         ])
 
-        self.play(LaggedStart(*[
-            Succession(
-                FadeInFromLarge(q_mark),
-                FadeOutAndShift(q_mark, DOWN),
-            )
-            for q_mark in q_marks
-        ]))
-        self.wait()
+        # self.play(LaggedStart(*[
+        #     Succession(
+        #         FadeInFromLarge(q_mark),
+        #         FadeOutAndShift(q_mark, DOWN),
+        #     )
+        #     for q_mark in q_marks
+        # ]))
+        # self.wait()
 
     def emphasize_rod(self):
         alt_rod = self.get_rod(0, 10, 50)

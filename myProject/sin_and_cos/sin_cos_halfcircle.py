@@ -208,7 +208,7 @@ class ShowSinCos(TrigRepresentationsScene):
         self.introduce_angle()
         self.show_sine_and_cosine()
         # self.show_tangent_and_cotangent()
-        # self.show_secant_and_cosecant()
+        # self.show_secant_and_cosecant()ß
         # self.explain_cosecant()
         # self.summarize_full_group()
 

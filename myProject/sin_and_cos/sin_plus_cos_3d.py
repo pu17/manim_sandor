@@ -156,7 +156,8 @@ class sin_cos_in_axis(SpecialThreeDScene):
         tex_x = TexMobject('x', background_stroke_color=WHITE, color=GREEN).rotate(PI/2, RIGHT).next_to(l_x, UP*1.25)
         tex_y = TexMobject('y', background_stroke_color=WHITE, color=PINK).rotate(PI/2, RIGHT).next_to(l_y, OUT*0.5)
         tex_t = TexMobject('t', background_stroke_color=WHITE, color=ORANGE).rotate(PI/2, RIGHT).next_to(l_t, RIGHT*0.5)
-        navi_group = VGroup(l_x, l_y, l_t, tex_x, tex_y, tex_t, navi_cube).move_to(cp.n2p(-0.6-3.2j))
+        # navi_group = VGroup(l_x, l_y, l_t, tex_x, tex_y, tex_t, navi_cube).move_to(cp.n2p(-0.6-3.2j))
+        navi_group = VGroup(l_x, l_y, l_t, tex_x, tex_y, tex_t).move_to(cp.n2p(-0.6-3.2j))
 
         ## rotate update ##
         # curve_3d.shift
@@ -337,7 +338,8 @@ class show_cubes(SpecialThreeDScene):
         tex_x = TexMobject('x', background_stroke_color=WHITE, color=GREEN).rotate(PI/2, RIGHT).next_to(l_x, UP*1.25)
         tex_y = TexMobject('y', background_stroke_color=WHITE, color=PINK).rotate(PI/2, RIGHT).next_to(l_y, OUT*0.5)
         tex_t = TexMobject('t', background_stroke_color=WHITE, color=ORANGE).rotate(PI/2, RIGHT).next_to(l_t, RIGHT*0.5)
-        navi_group = VGroup(l_x, l_y, l_t, tex_x, tex_y, tex_t, navi_cube).move_to(cp.n2p(-0.6-3.2j))
+        # navi_group = VGroup(l_x, l_y, l_t, tex_x, tex_y, tex_t, navi_cube).move_to(cp.n2p(-0.6-3.2j))
+        navi_group = VGroup(l_x, l_y, l_t, tex_x, tex_y, tex_t).move_to(cp.n2p(-0.6-3.2j))
 
 
         e_sc=0.7
@@ -354,13 +356,36 @@ class show_cubes(SpecialThreeDScene):
             #                            color=GREEN, stroke_width=4)).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+1.45))
             # self.sin_t.become(ParametricFunction(lambda t: np.array([t * r, 0, r * np.sin(w * t + self.varphi)]), t_min=0, t_max=8,
             #                            color=PINK, stroke_width=4)).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+2))
-        self.cos_t.add_updater(lambda c: c.become(ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t + self.varphi), 0]), t_min=-0.0001, t_max=8,
-                                      color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift(OUT*r*(1+1.45)).scale(e_sc,about_point=ORIGIN)))
-        self.sin_t.add_updater(lambda s: s.become(ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t + self.varphi)]), t_min=-0.0001, t_max=8,
-                                      color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift(DOWN*r*(1+2)).scale(e_sc,about_point=ORIGIN)))
+        # self.cos_t.add_updater(lambda c: c.become(ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t + self.varphi), 0]), t_min=-0.0001, t_max=8,
+        #                               color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((0.58*UP+OUT+LEFT*0.3)*r*(1+1.45)).scale(e_sc,about_point=ORIGIN)))
+        # self.sin_t.add_updater(lambda s: s.become(ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t + self.varphi)]), t_min=-0.0001, t_max=8,
+        #                               color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((0.5*DOWN+0.44*IN+LEFT*0.44)*r*(1+2)).scale(e_sc,about_point=ORIGIN)))
+        self.cos_t.add_updater(lambda c: c.become(ParametricFunction(lambda t: np.array([t*r, r * np.cos(w * t + self.varphi), 0]), t_min=-0.0001, t_max=8,color=GREEN, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((0*UP+OUT+LEFT*0)*r*(1+1.45)).scale(e_sc,about_point=ORIGIN)))
+        self.sin_t.add_updater(lambda s: s.become(ParametricFunction(lambda t: np.array([t*r, 0, r * np.sin(w * t + self.varphi)]), t_min=-0.0001, t_max=8, color=PINK, stroke_width=4).shift(axes.c2p(-2, 0, 0)).shift((DOWN)*r*(1+2)).scale(e_sc)))
 
         ## animation ##
+        line_color = LIGHT_GREY
+        s_width = 2
+        line_sc=4.5
+        axes_color=LIGHT_GREY
 
+        up_line=Line(ORIGIN,UP*line_sc,color=axes_color)
+        down_line=Line(ORIGIN,DOWN*line_sc*0.25,color=axes_color).add_tip()
+        in_line=Line(ORIGIN,IN*line_sc,color=axes_color)
+        out_line=Line(ORIGIN,OUT*line_sc*1.25,color=axes_color).add_tip()
+        right_line=Line(ORIGIN,RIGHT*line_sc*0.5,color=axes_color).add_tip()
+        left_line=Line(ORIGIN,LEFT*line_sc*0.5,color=axes_color)
+        up_text= TextMobject("up").move_to(up_line.get_end())
+        right_text= TextMobject("right").move_to(right_line.get_end())
+        left_text= TextMobject("left").move_to(left_line.get_end())
+        out_text= TextMobject("out").move_to(out_line.get_end())
+        in_text= TextMobject("in").move_to(in_line.get_end())
+        down_text= TextMobject("down").move_to(down_line.get_end())
+        
+
+
+        my_axes=VGroup(up_line,down_line,in_line,out_line,right_line,left_line,up_text,down_text,out_text,in_text,right_text,left_text,up_text)
+        self.add(my_axes)
         # self.add(cp, axes)
         circle.shift(axes.c2p(4, 0, 0))
         self.add(curve_3d, cube_g, circle, line_r, dot, navi_group, yt, xt, self.sin_t, self.cos_t, text_sint, text_cost, text_eiwt)
@@ -369,7 +394,35 @@ class show_cubes(SpecialThreeDScene):
         self.wait()
         self.add(rotate_group)
         rotate_group.add_updater(rotate_all)
-        self.wait(15)
+        
+        #sin
+        self.move_camera(
+            phi=90 * DEGREES,
+            theta=-90 * DEGREES,
+            # added_anims=[
+            #     self.camera.frame_center.move_to, ORIGIN,
+            # ]
+            run_time = 10
+            )
+        #circle
+        self.move_camera(
+            phi=90 * DEGREES,
+            theta=0 * DEGREES,
+            # added_anims=[
+            #     self.camera.frame_center.move_to, ORIGIN,
+            # ]
+            run_time = 10
+            )
+        self.move_camera(
+            phi=0 * DEGREES,
+            theta=90 * DEGREES,
+            # added_anims=[
+            #     self.camera.frame_center.move_to, ORIGIN,
+            # ]
+            run_time = 10
+            )
+
+        self.wait(35)
 class Dot3d(VGroup):
 
     def __init__(self, loc=ORIGIN, size=0.2, color=WHITE, **kwargs):
