@@ -3,7 +3,6 @@
 *.swp
 *.svg
 *.npy
-*.mp4
 .DS_Store
 homeless.py
 playground.py
@@ -16,7 +15,6 @@ ben_playground.py
 ben_cairo_test.py
 .floo
 .flooignore
-.vscode
 .vs
 *.xml
 *.iml
