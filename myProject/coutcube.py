@@ -122,11 +122,10 @@ class CountCube(SpecialThreeDScene):
                     
                     WiggleOutThenIn(anim),
                 )
-                names=locals()
-                
-                self.play(
-                    Write(Mobject("%s_text"%anim))
-                )
+                names=globals()
+                # self.play(
+                #     Write(names.get("%s_text"%anim))
+                # )
                 self.wait(2)
         quations_before=TexMobject("1*3","+","3*2","+","4*1","=","13").scale(self.text_scale)
 
