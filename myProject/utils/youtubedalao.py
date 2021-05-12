@@ -44,7 +44,6 @@ def return_random_coords(word,r_x,r_y,step_x,step_y):
     rango = range(len(word))
     return [word.get_center() + get_random_coord(r_x,r_y,step_x,step_y) for _ in rango]
 
-
 class WriteRandom(LaggedStart):
     CONFIG = {
         "lag_ratio":0.1,

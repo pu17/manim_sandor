@@ -1,14 +1,13 @@
 '''
 Author: puhongli
 Date: 2021-05-12 11:36:27
-LastEditTime: 2021-05-12 15:39:06
+LastEditTime: 2021-05-12 17:39:36
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /manim_sandor/myProject/for_17hertz/background.py
 '''
 from manimlib.imports import *
-from myProject.utils.debugTeX import *
-from myProject.utils.youtubedalao import *
+from manimlib.imports_my_util import *
 
 
 class hertzbackground(Scene):
@@ -16,7 +15,10 @@ class hertzbackground(Scene):
     'camera_config': {'background_color': BLACK},
     "side_length":1,
     "square_size":3,
+    #TODO: find good color 
     "square_color":"#d6d7ff",
+    "square_color2":PINK,
+    
     "square_opacity":0.5,
     }
     def construct(self):
@@ -31,9 +33,22 @@ class hertzbackground(Scene):
             for x in range(-x_max, x_max)
             for y in range(-y_max, y_max)
         ])
+        squares_after=squares.copy().set_color(self.square_color2)
+        # squares_after=squares.copy().set_fill(self.square_color2)
         squares.shift(RIGHT*0.5*1/self.square_size)
         self.play(
             FadeInRandom(squares)
         )
+        print(len(squares.split()))
+        self.play([
+            # *[Transform(squares[i],squares_after[i])
+            Rotating(squares[i],axis=UP+LEFT)
+            for i in range(len(squares.split()))
+            ], 
+            run_time=5
+            
+        )
+        
+        
         
         self.wait(2)
