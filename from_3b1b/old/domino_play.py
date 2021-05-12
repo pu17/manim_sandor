@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 
+from colour import color_scale
 from manimlib.imports import *
 
-
+from colour import color_scal
 class SimpleVelocityGraph(GraphScene):
     CONFIG = {
         # "frame_rate" : 4000,
