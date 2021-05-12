@@ -1,7 +1,7 @@
 '''
 Author: puhongli
 Date: 2021-05-12 11:36:27
-LastEditTime: 2021-05-12 14:39:59
+LastEditTime: 2021-05-12 15:39:06
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /manim_sandor/myProject/for_17hertz/background.py
