@@ -1,7 +1,7 @@
 '''
 Author: puhongli
 Date: 2021-05-12 11:36:27
-LastEditTime: 2021-05-12 17:39:36
+LastEditTime: 2021-05-12 18:24:58
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: /manim_sandor/myProject/for_17hertz/background.py
@@ -14,7 +14,7 @@ class hertzbackground(Scene):
     CONFIG={
     'camera_config': {'background_color': BLACK},
     "side_length":1,
-    "square_size":3,
+    "square_size":1,
     #TODO: find good color 
     "square_color":"#d6d7ff",
     "square_color2":PINK,
@@ -39,16 +39,25 @@ class hertzbackground(Scene):
         self.play(
             FadeInRandom(squares)
         )
-        print(len(squares.split()))
-        self.play([
-            # *[Transform(squares[i],squares_after[i])
-            Rotating(squares[i],axis=UP+LEFT)
-            for i in range(len(squares.split()))
-            ], 
-            run_time=5
+        
+        
+        # self.play(*[
+        #     # *[Transform(squares[i],squares_after[i])
+        #     Rotating(squares[i],axis=UP+LEFT)
+        #     for i in range(len(squares.split()))
+        #     ], 
+        #     *[Transform(squares[i],squares_after[i])
+        #     for i in range(len(squares.split()))
+        #     ],
+        #     run_time=5
             
+        # )
+        
+        self.play(*[
+            Rotating(mob,radians=PI,axis=UP+RIGHT)
+            for mob in squares[20:40]
+            ],
+            Rotating(squares[3:8],axis=UP+LEFT),
         )
-        
-        
         
         self.wait(2)

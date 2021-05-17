@@ -107,27 +107,39 @@ class CountCube(SpecialThreeDScene):
         anim_list=[layer1,layer2,layer3]
         
         print("anim_list2",anim_list)
-        def play_animation(animlist=anim_list):
-            for anim in anim_list:
-                anim_list2=anim_list.copy()
-                anim_list2.remove(anim)
-            
-                self.play(
-                    anim_list2[0].set_fill,GREY,
-                    anim_list2[1].set_fill,GREY,
-                    func_rate=there_and_back, 
-                    run_time=3
-                )
-                self.play(
-                    
-                    WiggleOutThenIn(anim),
-                )
-                #TODO: GET NAMES
-                names=globals()
-                # self.play(
-                #     Write(names.get("%s_text"%anim))
-                # )
-                self.wait(2)
+        def play_animation(animlist=anim_list,anim=layer1):
+            anim_list2=anim_list.copy()
+            anim_list2.remove(anim)
+        
+            self.play(
+                anim_list2[0].set_fill,GREY,
+                anim_list2[1].set_fill,GREY,
+                rate_func=there_and_back, 
+                run_time=3
+            )
+            self.play(
+                
+                WiggleOutThenIn(anim),
+            )
+            #TODO: GET NAMES
+            names=globals()
+            # self.play(
+            #     Write(names.get("%s_text"%anim))
+            # )
+            self.wait(2)
+        
+        play_animation()
+        self.play(
+                Write(layer1_text)
+            )
+        play_animation(anim=layer2)
+        self.play(
+                Write(layer2_text)
+            )
+        play_animation(anim=layer3)
+        self.play(
+                Write(layer3_text)
+            )
         quations_before=TexMobject("1*3","+","3*2","+","4*1","=","13").scale(self.text_scale)
         
         play_animation()
