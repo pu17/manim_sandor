@@ -72,11 +72,18 @@ class CountCube(SpecialThreeDScene):
                             group_name[x+group_dim*y+(group_dim**2)*z].next_to(group_name[x+group_dim*y+(group_dim**2)*z-1], UP, buff=0)
             return group_name
         def getdebugTeX(texm):
-            tex_ids=VGroup()
-            for i, j in enumerate(texm):
-                tex_id = Text(str(i), font="Consolas").scale(self.text_scale).set_color(YELLOW)
-                tex_id.next_to(j,OUT,buff=0)
-                tex_ids.add(tex_id)
+            if len(texm.split())>5:
+                print("mob:",texm)
+                tex_id = Text("1", font="Consolas").scale(self.text_scale).set_color(YELLOW)
+                tex_id.next_to(texm,OUT,buff=0)
+                return tex_id
+            else:
+                print("mob2:",texm)
+                tex_ids=VGroup()
+                for i, j in enumerate(texm):
+                    tex_id = Text(str(i), font="Consolas").scale(self.text_scale).set_color(YELLOW)
+                    tex_id.next_to(j,OUT,buff=0)
+                    tex_ids.add(tex_id)
             return tex_ids
 
         self.group_02 = create_group(group_dim=3,cube_color = self.color_list[1],group_name = self.group_02)
@@ -89,7 +96,7 @@ class CountCube(SpecialThreeDScene):
         layer3=self.group_02[18:26]
         layer_count1=self.group_02[0]
         layer_count2=VGroup(self.group_02[10],self.group_02[12],self.group_02[15])
-        layer_count3=VGroup(self.group_02[20],self.group_02[22:24],self.group_02[25])
+        layer_count3=VGroup(self.group_02[20],self.group_02[22],self.group_02[23],self.group_02[25])
         layer_texts=VGroup(*[
             getdebugTeX(mob)
             for mob in [layer_count1,layer_count2,layer_count3]
@@ -110,16 +117,19 @@ class CountCube(SpecialThreeDScene):
         def play_animation(animlist=anim_list,anim=layer1):
             anim_list2=anim_list.copy()
             anim_list2.remove(anim)
-        
+            ind_color=GREY
             self.play(
-                anim_list2[0].set_fill,GREY,
-                anim_list2[1].set_fill,GREY,
-                rate_func=there_and_back, 
+                anim_list2[0].set_fill,ind_color,
+                anim_list2[1].set_fill,ind_color,
+                # rate_func=there_and_back, 
                 run_time=3
             )
             self.play(
-                
                 WiggleOutThenIn(anim),
+            )
+            self.play(
+                anim_list2[0].set_fill,self.color_list[1],
+                anim_list2[1].set_fill,self.color_list[1],
             )
             #TODO: GET NAMES
             names=globals()
@@ -127,22 +137,50 @@ class CountCube(SpecialThreeDScene):
             #     Write(names.get("%s_text"%anim))
             # )
             self.wait(2)
-        
+        quations_left = TexMobject("3","2","1").scale(self.text_scale)
+        self.add_fixed_orientation_mobjects(quations_left)
+       
+        # quations_left[0].next_to(layer3,DOWN)
+        # quations_left[1].next_to(layer2,DOWN)
+        # quations_left[2].next_to(layer1,DOWN)
+        quations_left.arrange_submobjects(DOWN,buff=0.8).shift(DOWN*2+2*IN)
+        quations_before=TexMobject("1*3","+","3*2","+","4*1","=","13").scale(self.text_scale)
+        self.add_fixed_orientation_mobjects(quations_before)
+        quations_before.next_to(layer3,IN).shift(3*IN)
         play_animation()
+        self.play(
+            Write(quations_left)
+        )
         self.play(
                 Write(layer1_text)
             )
+        self.play(
+            Transform(VGroup(layer1_text,quations_left[0]),quations_before[0])
+        )
         play_animation(anim=layer2)
         self.play(
                 Write(layer2_text)
             )
+        self.play(
+            Write(quations_before[1]),
+            Transform(VGroup(layer2_text,quations_left[1]),quations_before[2])
+        )
         play_animation(anim=layer3)
         self.play(
                 Write(layer3_text)
             )
-        quations_before=TexMobject("1*3","+","3*2","+","4*1","=","13").scale(self.text_scale)
+        self.play(
+            Write(quations_before[3]),
+            Transform(VGroup(layer3_text,quations_left[2]),quations_before[4])
+        )
+        self.play(
+            Write(quations_before[5:])
+        )
         
-        play_animation()
+        # play_animation()
+        
+        # self.add(quations_left)
+        # self.add(quations_before)
         # self.play(
 
         # )
